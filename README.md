@@ -12,7 +12,7 @@ ElevatedRun.bat
 ```
 
 Above files needed to be run as local/service Administrator, hence need to be run in elevated mode
-Doubleclick ElevatedRun.bat to Run in your ALM host machine. Follow the guideline.
+this is can be done by doubleclick ElevatedRun.bat, run in your ALM host machine. Follow below guideline:
 1. Create a fileName as shortcut, example on this repository: shutdownALM and startALM
 2. Locate the full path of the bat file that you copy from above step: example C:\Users\username\directory\shutdown.bat
 3. ElevateRun.bat create 1 file per run, if you need to create for startALM.lnk you have to configure again for startrun.bat
