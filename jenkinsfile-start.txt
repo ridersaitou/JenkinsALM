@@ -1,0 +1,50 @@
+pipeline{
+    //agent
+    agent {
+        node {
+            label 'almprod'
+    }
+}
+stages{
+    stage('Ping before'){
+        steps{
+            echo "Ping current ALM Production status before execute script"
+            bat label:'Ping ALM Service', script:'sc query "HP Application Lifecycle Management"'
+        }
+    }
+    stage('Bring Up Service'){
+        steps{
+            echo "Starting ALM Production Service"
+            echo "....................Please Wait ......................"
+            bat label:'Execute', script: 'C:\\Users\\s-jenkins-testing\\Documents\\Command\\startALM.lnk'
+            sleep(time:120,unit:"SECONDS")
+            echo "ALM Service has been Start, Please wait 15 minutes to fully restore all components"
+        }
+    }
+    stage('Ping after'){
+        steps{
+            echo "Ping ALM Production status post-action execute script"
+            bat label:'Ping ALM Service', script:'sc query "HP Application Lifecycle Management"'
+        }
+    }
+}
+post {
+        always {
+            echo 'Sending Email'
+            
+         emailext (
+            mimeType: "text/html",
+            to: "DLPMIIDISDMEnterpriseTesting@pmi.com, SentanuEddy.Pramandang@sampoerna.com",
+            subject: "Jenkins Job '${env.JOB_NAME}:${currentBuild.currentResult} - [${env.BUILD_NUMBER}]'",
+            body:'''<html>This is Automated Testing Job Run in Jenkins 
+                    <br />===================================================================<br />
+                    Check console output at <a href="$BUILD_URL">${JOB_NAME} [${BUILD_NUMBER}]</a> 
+                    <br /> 
+                    <br />
+                    <pre>${BUILD_LOG, maxLines=9999, escapeHtml=false}</pre>
+                    <br />===================================================================<br />Enterprise Testing Team</html>'''
+            , attachLog: true
+            )
+        }
+    }
+}

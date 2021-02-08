@@ -1,0 +1,36 @@
+pipeline{
+    //agent
+    agent {
+        node {
+            label 'almprod'
+    }
+}
+stages{
+    stage('Hello ALM'){
+        steps{
+            echo 'Ping ALM Production'
+            bat label:'Hello There', script:'sc query "HP Application Lifecycle Management"'
+        }
+    }
+}
+post {
+        always {
+            echo 'Sending Email'
+            
+            emailext (
+            mimeType: "text/html",
+            to: "DLPMIIDISDMEnterpriseTesting@pmi.com, SentanuEddy.Pramandang@sampoerna.com",
+            subject: "Jenkins Job '${env.JOB_NAME}:${currentBuild.currentResult} - [${env.BUILD_NUMBER}]'",
+            body:'''<html>This is Automated Testing Job Run in Jenkins 
+                    <br />===================================================================<br />
+                    Check console output at <a href="$BUILD_URL">${JOB_NAME} [${BUILD_NUMBER}]</a> 
+                    <br /> 
+                    <br />
+                    <pre>${BUILD_LOG, maxLines=9999, escapeHtml=false}</pre>
+                    <br />===================================================================<br />Enterprise Testing Team</html>'''
+            , attachLog: true
+            )
+        
+        }
+    }
+}
