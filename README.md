@@ -21,4 +21,5 @@ this is can be done by doubleclick ElevatedRun.bat, run in your ALM host machine
 Create Jenkins pipeline configuration for each activity, change the configuration for emails, message, and node.
 In this case I create separated jenkinsfile for stop, start, and ping
 
-## End
+## Reference
+Bypass Administrator UAC is taken from [This Link](https://www.tenforums.com/tutorials/57690-create-elevated-shortcut-without-uac-prompt-windows-10-a.html)
